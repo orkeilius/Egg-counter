@@ -1,4 +1,4 @@
-package com.lesfeesdesoeufsbio.eggcounter
+package com.lesfeesdesoeufsbio.eggcounter.view
 
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
@@ -9,6 +9,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import com.lesfeesdesoeufsbio.eggcounter.R
 import com.lesfeesdesoeufsbio.eggcounter.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
