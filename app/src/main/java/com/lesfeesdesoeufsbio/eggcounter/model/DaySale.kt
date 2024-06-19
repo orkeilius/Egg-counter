@@ -1,17 +1,23 @@
 package com.lesfeesdesoeufsbio.eggcounter.model
 
-import java.time.LocalDate
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.serialization.Serializable
+import kotlinx.datetime.toLocalDateTime
 
-
+@Serializable
 class DaySale(
-    time: LocalDate = LocalDate.now(),
-    sales: ArrayList<EggSale> = arrayListOf<EggSale>()
-) {
-    val time = time
-    var sales = sales
-        private set
 
-    fun AddSale(sale : EggSale){
+    val date: LocalDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
+    private var sales: ArrayList<EggSale> = arrayListOf()
+) {
+
+    fun getSales():ArrayList<EggSale>{
+        return sales
+    }
+
+    fun addSale(sale : EggSale){
         sales.add(sale);
     }
 
