@@ -33,7 +33,7 @@ class DaySaleReposytory private constructor(val fileDir: File) {
 
     fun getAllDay(): ArrayList<DaySale>{
         val files = fileDir.listFiles()?.filter { it.isFile }
-        var out = arrayListOf<DaySale>()
+        val out = arrayListOf<DaySale>()
 
         files?.forEach{ file ->
             out.add(Json.decodeFromString<DaySale>(file.readText()))
