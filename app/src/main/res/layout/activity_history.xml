@@ -5,26 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".view.MainActivity">
+    tools:context=".view.HistoryActivity">
 
-
-    <GridLayout
-        android:id="@+id/grid_layout"
-        android:layout_marginTop="100dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:columnCount="3"
-        android:rowCount="3"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Historique"
+        android:textSize="24sp"
+        android:gravity="center"
         android:layout_gravity="center" />
 
-
     <Button
-        android:id="@+id/button_history"
+        android:id="@+id/button_home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
         android:layout_marginStart="8dp"
-        android:text="Historique" />
+        android:text="Accueil" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
