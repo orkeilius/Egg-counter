@@ -15,8 +15,7 @@
         <activity
             android:name=".view.HistoryActivity"
             android:exported="false"
-            android:label="@string/title_activity_history"
-            android:theme="@style/Theme.EggCounter.NoActionBar" />
+            android:label="Historique" />
         <activity
             android:name=".view.MainActivity"
             android:exported="true"
