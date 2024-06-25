@@ -20,6 +20,6 @@ enum class EggNumber (val nb : Int){
 }
 
 @Serializable
-enum class EggSize(){
-    small, medium, large
+enum class EggSize(val size : Char){
+    small('S'), medium('M'), large('L')
 }

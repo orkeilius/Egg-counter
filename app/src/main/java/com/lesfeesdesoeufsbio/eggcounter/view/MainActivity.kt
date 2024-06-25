@@ -2,29 +2,33 @@ package com.lesfeesdesoeufsbio.eggcounter.view
 
 import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.GridLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Button
 import com.lesfeesdesoeufsbio.eggcounter.R
 import com.lesfeesdesoeufsbio.eggcounter.databinding.ActivityMainBinding
+import com.lesfeesdesoeufsbio.eggcounter.model.DaySale
+import com.lesfeesdesoeufsbio.eggcounter.model.DaySaleReposytory
+import com.lesfeesdesoeufsbio.eggcounter.model.EggNumber
+import com.lesfeesdesoeufsbio.eggcounter.model.EggSale
+import com.lesfeesdesoeufsbio.eggcounter.model.EggSize
 
 class MainActivity : AppCompatActivity() {
 
 
     private lateinit var binding: ActivityMainBinding
-    private val sizes = arrayOf("S", "M", "L")
-    private val quantities = arrayOf(6, 12, 30)
+    private val sizes = EggSize.entries.toTypedArray()
+    private val quantities = EggNumber.entries.toTypedArray()
+
+    var daySaleRepository : DaySaleReposytory? = null
+    var daySale : DaySale? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +36,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_main)
 
+        daySaleRepository = DaySaleReposytory.getInstance(applicationContext)
+        daySale = daySaleRepository!!.getDay()
 
         val gridLayout: GridLayout = findViewById(R.id.grid_layout)
         val inflater = LayoutInflater.from(this)
@@ -41,8 +47,24 @@ class MainActivity : AppCompatActivity() {
                 val itemView: View = inflater.inflate(R.layout.grid_item, gridLayout, false)
 
                 val itemText: TextView = itemView.findViewById(R.id.item_text)
-                itemText.text = "Quantité: $quantity Taille: $size"
+                itemText.text = "Quantité: ${quantity.nb} Taille: ${size.size}"
 
+                val valueText: TextView = itemView.findViewById(R.id.text_value)
+                valueText.text = daySale!!.getNumberSaleForType(quantity, size).toString()
+
+                val addButton: Button = itemView.findViewById(R.id.button_add)
+                addButton.setOnClickListener {
+                    daySale!!.addSale(EggSale(quantity, size))
+                    updateButton(itemView,quantity,size)
+                    daySaleRepository!!.save(daySale!!)
+                }
+
+                val removeButton: Button = itemView.findViewById(R.id.button_remove)
+                removeButton.setOnClickListener {
+                    daySale!!.removeSale(quantity, size)
+                    updateButton(itemView,quantity,size)
+                    daySaleRepository!!.save(daySale!!)
+                }
 
                 val params = GridLayout.LayoutParams()
                 params.width = 0
@@ -88,4 +110,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun updateButton(item: View,eggNumber: EggNumber,eggSize: EggSize) {
+        val valueText = item.findViewById<TextView>(R.id.text_value)
+        valueText.text = daySale!!.getNumberSaleForType(eggNumber, eggSize).toString()
+    }
 }
