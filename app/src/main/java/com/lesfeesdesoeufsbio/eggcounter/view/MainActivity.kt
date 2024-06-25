@@ -3,14 +3,15 @@ package com.lesfeesdesoeufsbio.eggcounter.view
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
-import android.widget.GridLayout
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import android.widget.Button
+import android.widget.GridLayout
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.lesfeesdesoeufsbio.eggcounter.R
 import com.lesfeesdesoeufsbio.eggcounter.databinding.ActivityMainBinding
 import com.lesfeesdesoeufsbio.eggcounter.model.DaySale
@@ -18,6 +19,8 @@ import com.lesfeesdesoeufsbio.eggcounter.model.DaySaleReposytory
 import com.lesfeesdesoeufsbio.eggcounter.model.EggNumber
 import com.lesfeesdesoeufsbio.eggcounter.model.EggSale
 import com.lesfeesdesoeufsbio.eggcounter.model.EggSize
+import com.lesfeesdesoeufsbio.eggcounter.utils.AppLifecycleObserver
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,6 +35,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val appLifecycleObserver = AppLifecycleObserver(this)
+        ProcessLifecycleOwner.get().lifecycle.addObserver(appLifecycleObserver)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_main)

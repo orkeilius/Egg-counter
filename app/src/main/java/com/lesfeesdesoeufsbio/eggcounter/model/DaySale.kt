@@ -1,5 +1,6 @@
 package com.lesfeesdesoeufsbio.eggcounter.model
 
+import com.lesfeesdesoeufsbio.eggcounter.utils.TimeHelper
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -9,7 +10,7 @@ import kotlinx.datetime.toLocalDateTime
 @Serializable
 class DaySale(
 
-    val date: LocalDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
+    val date: LocalDate = TimeHelper.getCurrentLocalDateTime().date,
     private var sales: ArrayList<EggSale> = arrayListOf()
 ) {
 
