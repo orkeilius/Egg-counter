@@ -2,7 +2,10 @@ package com.lesfeesdesoeufsbio.eggcounter.model
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.encodeToString
 import java.io.File
@@ -41,7 +44,9 @@ class DaySaleReposytory private constructor(val fileDir: File) {
         return out
     }
 
-    fun getDay(date : LocalDate) : DaySale{
+    fun getDay(date : LocalDate= Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date) : DaySale{
+
+
         val file = File(fileDir,generateFileName(date))
 
         if(!file.exists()){

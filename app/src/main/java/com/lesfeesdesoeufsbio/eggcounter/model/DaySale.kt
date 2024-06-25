@@ -20,5 +20,25 @@ class DaySale(
     fun addSale(sale : EggSale){
         sales.add(sale);
     }
+    fun removeSale(eggNumber: EggNumber, eggSize: EggSize) {
+        for (sale in sales) {
+            if (sale.number == eggNumber && sale.size == eggSize) {
+                sales.remove(sale)
+                return
+            }
+        }
+    }
+
+    fun getNumberSaleForType(eggNumber: EggNumber, eggSize: EggSize): Int {
+        var number = 0
+        for (sale in sales) {
+            if (sale.number == eggNumber && sale.size == eggSize) {
+                number++
+            }
+        }
+        return number
+
+    }
+
 
 }
