@@ -48,8 +48,7 @@
             android:textAlignment="center"
             android:textColor="#FFFFFF"
             android:textSize="24sp"
-            android:textStyle="bold"
-            app:rippleColor="#E91E63" />
+            android:textStyle="bold" />
 
         <Space
             android:layout_width="wrap_content"
@@ -72,8 +71,7 @@
             android:textAlignment="center"
             android:textColor="#FFFFFF"
             android:textSize="24sp"
-            android:textStyle="bold"
-            app:rippleColor="#2196F3" />
+            android:textStyle="bold" />
 
 
     </LinearLayout>
