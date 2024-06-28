@@ -1,22 +1,16 @@
 package com.lesfeesdesoeufsbio.eggcounter.model
 
 import com.lesfeesdesoeufsbio.eggcounter.utils.TimeHelper
-import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
 import kotlinx.serialization.Serializable
-import kotlinx.datetime.toLocalDateTime
 
 @Serializable
-class DaySale(
+data class DaySale(
 
     val date: LocalDate = TimeHelper.getCurrentLocalDateTime().date,
-    private var sales: ArrayList<EggSale> = arrayListOf()
+    val sales: MutableList<EggSale> = arrayListOf()
 ) {
 
-    fun getSales():ArrayList<EggSale>{
-        return sales
-    }
 
     fun addSale(sale : EggSale){
         sales.add(sale);
@@ -57,6 +51,12 @@ class DaySale(
             number += sale.getPrice()
         }
         return number
+    }
+
+    fun deepcopy(): DaySale{
+        val list = sales.toMutableList()
+        return this.copy(sales = list)
+
     }
 
 
