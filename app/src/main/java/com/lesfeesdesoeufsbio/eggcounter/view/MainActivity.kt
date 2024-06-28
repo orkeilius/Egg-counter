@@ -40,11 +40,12 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
+            EggCounterTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     MainView(
                         modifier = Modifier.padding(innerPadding)
                     )
-
+                }
             }
         }
     }
@@ -66,7 +67,10 @@ fun MainView(modifier: Modifier = Modifier,mainViewModel: MainViewModel = viewMo
                     .padding(vertical = 20.dp, horizontal = 6.dp)
             ) {
                 for (size in EggSize.values()){
-                    CounterItem(quantity,size,Modifier.weight(0.25f).padding(6.dp))
+                    CounterItem(quantity,size,
+                        Modifier
+                            .weight(0.25f)
+                            .padding(6.dp))
                 }
             }
 
