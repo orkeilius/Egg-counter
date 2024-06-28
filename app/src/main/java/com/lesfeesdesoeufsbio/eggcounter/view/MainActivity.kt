@@ -40,12 +40,11 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            EggCounterTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     MainView(
                         modifier = Modifier.padding(innerPadding)
                     )
-                }
+
             }
         }
     }
