@@ -13,13 +13,11 @@
         android:theme="@style/Theme.EggCounter"
         tools:targetApi="31">
         <activity
-            android:name=".view.HistoryActivity"
-            android:exported="false"
-            android:label="Historique" />
-        <activity
             android:name=".view.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.EggCounter">
+            android:label="@string/title_activity_main"
+            android:theme="@style/Theme.EggCounter" >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

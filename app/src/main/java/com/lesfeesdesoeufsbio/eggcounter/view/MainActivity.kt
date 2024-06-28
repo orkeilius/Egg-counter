@@ -1,129 +1,84 @@
 package com.lesfeesdesoeufsbio.eggcounter.view
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.widget.Button
-import android.widget.GridLayout
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ProcessLifecycleOwner
-import com.lesfeesdesoeufsbio.eggcounter.R
-import com.lesfeesdesoeufsbio.eggcounter.databinding.ActivityMainBinding
-import com.lesfeesdesoeufsbio.eggcounter.model.DaySale
-import com.lesfeesdesoeufsbio.eggcounter.model.DaySaleReposytory
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lesfeesdesoeufsbio.eggcounter.model.EggNumber
-import com.lesfeesdesoeufsbio.eggcounter.model.EggSale
 import com.lesfeesdesoeufsbio.eggcounter.model.EggSize
 import com.lesfeesdesoeufsbio.eggcounter.utils.AppLifecycleObserver
+import com.lesfeesdesoeufsbio.eggcounter.view.item.CounterItem
+import com.lesfeesdesoeufsbio.eggcounter.view.ui.theme.EggCounterTheme
+import com.lesfeesdesoeufsbio.eggcounter.viewModel.MainViewModel
 
 
-class MainActivity : AppCompatActivity() {
-
-
-    private lateinit var binding: ActivityMainBinding
-    private val sizes = EggSize.entries.toTypedArray()
-    private val quantities = EggNumber.entries.toTypedArray()
-
-    var daySaleRepository : DaySaleReposytory? = null
-    var daySale : DaySale? = null
-
-
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val appLifecycleObserver = AppLifecycleObserver(this)
         ProcessLifecycleOwner.get().lifecycle.addObserver(appLifecycleObserver)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_main)
 
-        daySaleRepository = DaySaleReposytory.getInstance(applicationContext)
-        daySale = daySaleRepository!!.getDay()
-
-        val gridLayout: GridLayout = findViewById(R.id.grid_layout)
-        val inflater = LayoutInflater.from(this)
-
-        for (quantity in quantities) {
-            for (size in sizes) {
-                val itemView: View = inflater.inflate(R.layout.grid_item, gridLayout, false)
-
-                val itemText: TextView = itemView.findViewById(R.id.item_text)
-                itemText.text = "Quantité: ${quantity.nb} Taille: ${size.size}"
-
-                val valueText: TextView = itemView.findViewById(R.id.text_value)
-                valueText.text = daySale!!.getNumberSaleForType(quantity, size).toString()
-
-                val totalText: TextView = findViewById(R.id.textTotal)
-                totalText.text = "TOTAL : " + daySale!!.getTotal().toString()
-
-                val addButton: Button = itemView.findViewById(R.id.button_add)
-                addButton.setOnClickListener {
-                    daySale!!.addSale(EggSale(quantity, size))
-                    updateButton(itemView,quantity,size)
-                    totalText.text = "TOTAL : " + daySale!!.getTotal().toString()
-                    daySaleRepository!!.save(daySale!!)
+        enableEdgeToEdge()
+        setContent {
+            EggCounterTheme {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    MainView(
+                        modifier = Modifier.padding(innerPadding)
+                    )
                 }
+            }
+        }
+    }
+}
 
-                val removeButton: Button = itemView.findViewById(R.id.button_remove)
-                removeButton.setOnClickListener {
-                    daySale!!.removeSale(quantity, size)
-                    updateButton(itemView,quantity,size)
-                    totalText.text = "TOTAL : " + daySale!!.getTotal().toString()
-                    daySaleRepository!!.save(daySale!!)
-
+@Composable
+fun MainView(modifier: Modifier = Modifier,mainViewModel: MainViewModel = viewModel()) {
+    val daySale by mainViewModel.daySale.collectAsState()
+    Column(
+        modifier = modifier
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Center
+        ,
+    ){
+        for (quantity in EggNumber.values()){
+            Row(
+                modifier = Modifier
+                    .wrapContentHeight()
+                    .padding(vertical = 20.dp, horizontal = 6.dp)
+            ) {
+                for (size in EggSize.values()){
+                    CounterItem(quantity,size,Modifier.weight(0.25f).padding(6.dp))
                 }
-
-                val params = GridLayout.LayoutParams()
-                params.width = 0
-                params.height = GridLayout.LayoutParams.WRAP_CONTENT
-                // le undefined ici je le changerai probablement j'ai juste pas tout capté sur le grid.layout
-                params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
-                itemView.layoutParams = params
-
-                gridLayout.addView(itemView)
             }
+
         }
+        Text(
+            text = "Total : %.2f €".format(daySale.getTotal()),
+            fontSize = 34.sp,
+            textAlign = TextAlign.Center
+            , modifier = Modifier.fillMaxWidth()
 
+        )
 
-        // Bouton Historique (mène à l'activité HistoryActivity)
-        val buttonHistory: Button = findViewById(R.id.button_history)
-        buttonHistory.setOnClickListener {
-            val intent = Intent(this, HistoryActivity::class.java)
-            startActivity(intent)
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // le menu il est aigri il veut pas s'afficher
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // test pour l'affichage de la barre menu (équivalent du bouton historique)
-        return when (item.itemId) {
-            R.id.action_home -> {
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                true
-            }
-            R.id.action_history -> {
-                val intent = Intent(this, HistoryActivity::class.java)
-                startActivity(intent)
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    private fun updateButton(item: View,eggNumber: EggNumber,eggSize: EggSize) {
-        val valueText = item.findViewById<TextView>(R.id.text_value)
-        valueText.text = daySale!!.getNumberSaleForType(eggNumber, eggSize).toString()
     }
 }
