@@ -58,10 +58,14 @@ class MainActivity : AppCompatActivity() {
                 val valueText: TextView = itemView.findViewById(R.id.text_value)
                 valueText.text = daySale!!.getNumberSaleForType(quantity, size).toString()
 
+                val totalText: TextView = findViewById(R.id.textTotal)
+                totalText.text = "TOTAL : " + daySale!!.getTotal().toString()
+
                 val addButton: Button = itemView.findViewById(R.id.button_add)
                 addButton.setOnClickListener {
                     daySale!!.addSale(EggSale(quantity, size))
                     updateButton(itemView,quantity,size)
+                    totalText.text = "TOTAL : " + daySale!!.getTotal().toString()
                     daySaleRepository!!.save(daySale!!)
                 }
 
@@ -69,7 +73,9 @@ class MainActivity : AppCompatActivity() {
                 removeButton.setOnClickListener {
                     daySale!!.removeSale(quantity, size)
                     updateButton(itemView,quantity,size)
+                    totalText.text = "TOTAL : " + daySale!!.getTotal().toString()
                     daySaleRepository!!.save(daySale!!)
+
                 }
 
                 val params = GridLayout.LayoutParams()

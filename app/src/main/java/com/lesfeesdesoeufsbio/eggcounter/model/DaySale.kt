@@ -41,5 +41,23 @@ class DaySale(
 
     }
 
+    fun getEggNumberForSize(eggSize: EggSize): Int{
+        var number = 0
+        for (sale in sales){
+            if(sale.size == eggSize){
+                number += sale.number.nb
+            }
+        }
+        return number
+    }
+
+    fun getTotal():Float{
+        var number = 0f
+        for (sale in sales){
+            number += sale.getPrice()
+        }
+        return number
+    }
+
 
 }
