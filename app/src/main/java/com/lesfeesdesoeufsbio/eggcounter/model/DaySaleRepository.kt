@@ -12,6 +12,7 @@ class DaySaleReposytory private constructor(private val fileDir: File) {
     companion object {
 
         private var instance: DaySaleReposytory? = null
+        private val json = Json { encodeDefaults = true }
 
         fun getInstance(context: Context): DaySaleReposytory {
             if (this.instance == null) {
@@ -29,7 +30,7 @@ class DaySaleReposytory private constructor(private val fileDir: File) {
         if (file.exists() && file.isFile) {
             file.delete()
         }
-        file.writeText(Json.encodeToString(data))
+        file.writeText(json.encodeToString(data))
     }
 
     fun getAllDay(): ArrayList<DaySale>{
@@ -37,8 +38,9 @@ class DaySaleReposytory private constructor(private val fileDir: File) {
         val out = arrayListOf<DaySale>()
 
         files?.forEach{ file ->
-            out.add(Json.decodeFromString<DaySale>(file.readText()))
+            out.add(json.decodeFromString<DaySale>(file.readText()))
         }
+        out.reverse()
         return out
     }
 
