@@ -40,7 +40,7 @@ class DaySaleReposytory private constructor(private val fileDir: File) {
         files?.forEach{ file ->
             out.add(json.decodeFromString<DaySale>(file.readText()))
         }
-        out.reverse()
+        out.sortByDescending { it.date.toEpochDays() }
         return out
     }
 
