@@ -1,7 +1,6 @@
 package com.lesfeesdesoeufsbio.eggcounter.view
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -88,8 +87,6 @@ fun Router(navController: NavHostController = rememberNavController()){
             Modifier.padding(innerPadding)
         ) {
             navItem.forEach { item ->
-                Log.d("anim",item.label+ item.pos.toString() + currentPos.toString())
-
 
                 composable(item.label, enterTransition = {
                     return@composable slideIntoContainer(getAnimation(currentPos), tween(700)
