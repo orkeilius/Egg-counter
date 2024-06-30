@@ -1,5 +1,7 @@
 package com.lesfeesdesoeufsbio.eggcounter.view.item
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -35,14 +37,18 @@ fun CounterItem(
     mainViewModel: MainViewModel = viewModel()
 ) {
     val daySale by mainViewModel.daySale.collectAsState()
-
+    val animatedSize by animateDpAsState(
+        targetValue = if (daySale.getNumberSaleForType(eggNumber, eggSize) != 0) 30.dp else 0.dp,
+    )
     Card(
         modifier = modifier
-            .height(150.dp)
+            .height(150.dp + animatedSize)
     ) {
 
         Column(
-            modifier = modifier.padding(2.dp).wrapContentHeight(),
+            modifier = modifier
+                .padding(2.dp)
+                .wrapContentHeight(),
             horizontalAlignment = Alignment.CenterHorizontally
 
         ) {
@@ -52,6 +58,13 @@ fun CounterItem(
             )
             Text(text = daySale.getNumberSaleForType(eggNumber, eggSize).toString(),
                 fontSize = 36.sp)
+            AnimatedVisibility(
+                modifier = Modifier.height(animatedSize),
+                visible = (animatedSize != 0.dp)
+            ) {
+                Text(text = " %.2f€".format(daySale.getTotalForType(eggNumber, eggSize)))
+
+            }
             Row {
                 Button(
                     onClick = { mainViewModel.counterRemove(eggNumber, eggSize) },
