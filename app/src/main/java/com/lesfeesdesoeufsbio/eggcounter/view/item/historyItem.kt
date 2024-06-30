@@ -2,11 +2,11 @@ package com.lesfeesdesoeufsbio.eggcounter.view.item
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,8 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -29,6 +28,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -53,7 +53,9 @@ fun HistorytItem(
     val density = LocalDensity.current
     val animatedSize by animateDpAsState(
         targetValue = if (visible) 350.dp else 0.dp,
-        label = "alpha"
+    )
+    val animatedRotation by animateFloatAsState(
+        targetValue = if (visible) 90f else 0f,
     )
 
 
@@ -87,17 +89,15 @@ fun HistorytItem(
                         }
                     }
                 }
-                Button(
-                    onClick = {},
-                    contentPadding = PaddingValues(0.dp),
-                    modifier = Modifier.size(50.dp)
-                ) {
-                    Icon(
-                        Icons.AutoMirrored.Default.ArrowForward,
-                        contentDescription = "open",
 
-                        )
-                }
+                Icon(
+                    Icons.AutoMirrored.Default.ArrowForwardIos,
+                    contentDescription = "open",
+                    modifier = Modifier
+                        .size(50.dp)
+                        .padding(8.dp)
+                        .rotate(animatedRotation),
+                )
             }
         }
         AnimatedVisibility(
