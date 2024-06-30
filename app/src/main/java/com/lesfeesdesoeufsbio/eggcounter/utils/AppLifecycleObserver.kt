@@ -6,9 +6,9 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 
 
-class AppLifecycleObserver(val activity : Activity) : LifecycleObserver {
+class AppLifecycleObserver(private val activity : Activity) : LifecycleObserver {
 
-    var date = TimeHelper.getCurrentLocalDateTime().date
+    private var date = TimeHelper.getCurrentLocalDateTime().date
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun onEnterForeground() {

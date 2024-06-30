@@ -13,7 +13,7 @@ data class DaySale(
 
 
     fun addSale(sale : EggSale){
-        sales.add(sale);
+        sales.add(sale)
     }
     fun removeSale(eggNumber: EggNumber, eggSize: EggSize) {
         for (sale in sales) {

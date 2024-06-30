@@ -18,17 +18,17 @@ class EggSale(
         when(size){
             EggSize.small -> return 0f
             EggSize.medium -> {
-                when(number){
-                    EggNumber.six -> return 2.50f
-                    EggNumber.twelve -> return 4.50f
-                    EggNumber.thirty -> return 11f
+                return when(number){
+                    EggNumber.six -> 2.50f
+                    EggNumber.twelve -> 4.50f
+                    EggNumber.thirty -> 11f
                 }
             }
             EggSize.large ->{
-                when(number){
-                    EggNumber.six -> return 3f
-                    EggNumber.twelve -> return 5.5f
-                    EggNumber.thirty -> return 0f
+                return when(number){
+                    EggNumber.six -> 3f
+                    EggNumber.twelve -> 5.5f
+                    EggNumber.thirty -> 0f
                 }
 
             }

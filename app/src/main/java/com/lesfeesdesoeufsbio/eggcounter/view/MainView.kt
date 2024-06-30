@@ -29,13 +29,13 @@ fun MainView(modifier: Modifier = Modifier, mainViewModel: MainViewModel = viewM
             .fillMaxSize(),
         verticalArrangement = Arrangement.Center,
     ) {
-        for (quantity in EggNumber.values()) {
+        for (quantity in EggNumber.entries) {
             Row(
                 modifier = Modifier
                     .wrapContentHeight()
                     .weight(1f)
             ) {
-                for (size in EggSize.values()) {
+                for (size in EggSize.entries) {
                     CounterItem(
                         quantity, size,
                         Modifier

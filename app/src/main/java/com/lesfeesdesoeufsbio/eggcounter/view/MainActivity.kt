@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Router(navController: NavHostController = rememberNavController()){
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    var currentRoute = navBackStackEntry?.destination?.route
+    val currentRoute = navBackStackEntry?.destination?.route
 
     val navItem = listOf(
         NavItem("today",Icons.Default.Egg) {arg -> MainView(arg) },
@@ -90,4 +90,4 @@ fun Router(navController: NavHostController = rememberNavController()){
     }
 }
 
-data class NavItem(val label: String, val icon: ImageVector,val route : @Composable ((Modifier) -> Unit)) {}
+data class NavItem(val label: String, val icon: ImageVector,val route : @Composable ((Modifier) -> Unit))

@@ -8,7 +8,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.encodeToString
 import java.io.File
 
-class DaySaleReposytory private constructor(val fileDir: File) {
+class DaySaleReposytory private constructor(private val fileDir: File) {
     companion object {
 
         private var instance: DaySaleReposytory? = null
@@ -57,6 +57,6 @@ class DaySaleReposytory private constructor(val fileDir: File) {
 
 
     private fun generateFileName(date : LocalDate): String{
-        return "DaySale-" + date.toString()
+        return "DaySale-$date"
     }
 }
