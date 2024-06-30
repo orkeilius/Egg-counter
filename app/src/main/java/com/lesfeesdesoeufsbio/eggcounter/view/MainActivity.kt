@@ -1,9 +1,12 @@
 package com.lesfeesdesoeufsbio.eggcounter.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -52,9 +55,12 @@ fun Router(navController: NavHostController = rememberNavController()){
     val currentRoute = navBackStackEntry?.destination?.route
 
     val navItem = listOf(
-        NavItem("today",Icons.Default.Egg) {arg -> MainView(arg) },
-        NavItem("history", Icons.Default.History) { arg -> HistoryView(arg) }
+        NavItem("today",Icons.Default.Egg, {arg -> MainView(arg) },0),
+        NavItem("history", Icons.Default.History, { arg -> HistoryView(arg) },1)
     )
+
+    val currentPos:Int = navItem.fold(0){acc,item -> if (item.label == currentRoute) item.pos else acc }
+
     Scaffold(
         bottomBar = {
             NavigationBar(Modifier) {
@@ -82,7 +88,15 @@ fun Router(navController: NavHostController = rememberNavController()){
             Modifier.padding(innerPadding)
         ) {
             navItem.forEach { item ->
-                composable(item.label) {
+                Log.d("anim",item.label+ item.pos.toString() + currentPos.toString())
+
+
+                composable(item.label, enterTransition = {
+                    return@composable slideIntoContainer(getAnimation(currentPos), tween(700)
+                        )
+                }, exitTransition = {
+                    return@composable slideOutOfContainer(getAnimation(currentPos), tween(700))
+                }) {
                     item.route.invoke(
                         Modifier
                             .padding()
@@ -94,8 +108,18 @@ fun Router(navController: NavHostController = rememberNavController()){
     }
 }
 
+
+fun getAnimation(currentPos:Int): AnimatedContentTransitionScope.SlideDirection {
+    if (currentPos == 1){
+        return AnimatedContentTransitionScope.SlideDirection.Start // vers gauche
+    } else {
+        return AnimatedContentTransitionScope.SlideDirection.End // go droite
+    }
+}
+
 data class NavItem(
     val label: String,
     val icon: ImageVector,
-    val route: @Composable ((Modifier) -> Unit)
+    val route: @Composable ((Modifier) -> Unit),
+    val pos : Int
 )
