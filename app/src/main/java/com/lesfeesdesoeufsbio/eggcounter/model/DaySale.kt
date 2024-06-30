@@ -24,6 +24,12 @@ data class DaySale(
         }
     }
 
+    fun getTotalForType(eggNumber: EggNumber, eggSize: EggSize): Float {
+        val price = EggSale(eggNumber,eggSize).getPrice()
+        val eggSaleNb =  getNumberSaleForType(eggNumber,eggSize)
+        return price * eggSaleNb
+    }
+
     fun getNumberSaleForType(eggNumber: EggNumber, eggSize: EggSize): Int {
         var number = 0
         for (sale in sales) {
@@ -58,6 +64,4 @@ data class DaySale(
         return this.copy(sales = list)
 
     }
-
-
 }
