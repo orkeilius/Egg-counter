@@ -4,9 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Egg
 import androidx.compose.material.icons.filled.History
@@ -54,40 +54,49 @@ fun Router(navController: NavHostController = rememberNavController()){
 
     val navItem = listOf(
         NavItem("today",Icons.Default.Egg) {arg -> MainView(arg) },
-        NavItem("history",Icons.Default.History) {arg -> Text("holla") }
+        NavItem("history", Icons.Default.History) { arg -> HistoryView(arg) }
     )
-    Column {
         Scaffold(
-            modifier = Modifier.weight(1f),
             bottomBar = {
-            }) { innerPadding ->
-            NavHost(navController, startDestination = navItem[0].label) {
-                navItem.forEach{ item ->
-                    composable(item.label) { item.route.invoke(
-                        Modifier.padding(innerPadding)
-                    ) }
-
+                NavigationBar(Modifier) {
+                    navItem.forEach { item ->
+                        NavigationBarItem(icon = {
+                            Icon(
+                                item.icon, contentDescription = item.label
+                            )
+                        },
+                            label = { Text(item.label) },
+                            selected = currentRoute == item.label,
+                            onClick = {
+                                navController.navigate(item.label) {
+                                    //popUpTo(navController.graph.startDestinationId)
+                                    launchSingleTop = true
+                                }
+                            })
+                    }
                 }
             }
-        }
-        NavigationBar (Modifier.wrapContentHeight()){
-                navItem.forEach{ item ->
-                NavigationBarItem(
-                    icon = { Icon(item.icon, contentDescription = item.label) },
-                    label = { Text(item.label) },
-                    selected = currentRoute == item.label,
-                    onClick = {  navController.navigate(item.label) {
+        ) { innerPadding ->
 
-                        //popUpTo(navController.graph.startDestinationId)
-                        launchSingleTop = true
-                    } }
-                )
+            NavHost(
+                navController,
+                startDestination = navItem[0].label,
+                Modifier.padding(innerPadding)
+            ) {
+                navItem.forEach { item ->
+                    composable(item.label) {
+                        item.route.invoke(
+                            Modifier
+                                .padding()
+                                .fillMaxSize()
+                        )
+                    }
+                }
             }
 
         }
 
 
-    }
 }
 
 data class NavItem(val label: String, val icon: ImageVector,val route : @Composable ((Modifier) -> Unit))
