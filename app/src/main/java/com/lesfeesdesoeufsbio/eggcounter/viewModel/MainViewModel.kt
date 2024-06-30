@@ -1,9 +1,6 @@
 package com.lesfeesdesoeufsbio.eggcounter.viewModel
 
 import android.app.Application
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import com.lesfeesdesoeufsbio.eggcounter.model.DaySale
 import com.lesfeesdesoeufsbio.eggcounter.model.DaySaleReposytory

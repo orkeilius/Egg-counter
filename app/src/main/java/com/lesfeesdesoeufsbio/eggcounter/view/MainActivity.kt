@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Egg
@@ -56,47 +55,47 @@ fun Router(navController: NavHostController = rememberNavController()){
         NavItem("today",Icons.Default.Egg) {arg -> MainView(arg) },
         NavItem("history", Icons.Default.History) { arg -> HistoryView(arg) }
     )
-        Scaffold(
-            bottomBar = {
-                NavigationBar(Modifier) {
-                    navItem.forEach { item ->
-                        NavigationBarItem(icon = {
-                            Icon(
-                                item.icon, contentDescription = item.label
-                            )
-                        },
-                            label = { Text(item.label) },
-                            selected = currentRoute == item.label,
-                            onClick = {
-                                navController.navigate(item.label) {
-                                    //popUpTo(navController.graph.startDestinationId)
-                                    launchSingleTop = true
-                                }
-                            })
-                    }
-                }
-            }
-        ) { innerPadding ->
-
-            NavHost(
-                navController,
-                startDestination = navItem[0].label,
-                Modifier.padding(innerPadding)
-            ) {
+    Scaffold(
+        bottomBar = {
+            NavigationBar(Modifier) {
                 navItem.forEach { item ->
-                    composable(item.label) {
-                        item.route.invoke(
-                            Modifier
-                                .padding()
-                                .fillMaxSize()
+                    NavigationBarItem(icon = {
+                        Icon(
+                            item.icon, contentDescription = item.label
                         )
-                    }
+                    },
+                        label = { Text(item.label) },
+                        selected = currentRoute == item.label,
+                        onClick = {
+                            navController.navigate(item.label) {
+                                //popUpTo(navController.graph.startDestinationId)
+                                launchSingleTop = true
+                            }
+                        })
                 }
             }
-
         }
-
-
+    ) { innerPadding ->
+        NavHost(
+            navController,
+            startDestination = navItem[0].label,
+            Modifier.padding(innerPadding)
+        ) {
+            navItem.forEach { item ->
+                composable(item.label) {
+                    item.route.invoke(
+                        Modifier
+                            .padding()
+                            .fillMaxSize()
+                    )
+                }
+            }
+        }
+    }
 }
 
-data class NavItem(val label: String, val icon: ImageVector,val route : @Composable ((Modifier) -> Unit))
+data class NavItem(
+    val label: String,
+    val icon: ImageVector,
+    val route: @Composable ((Modifier) -> Unit)
+)
