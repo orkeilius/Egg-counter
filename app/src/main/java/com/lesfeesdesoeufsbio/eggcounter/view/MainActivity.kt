@@ -11,17 +11,28 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Egg
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ProcessLifecycleOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.compose.viewModel import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.lesfeesdesoeufsbio.eggcounter.model.EggNumber
 import com.lesfeesdesoeufsbio.eggcounter.model.EggSize
 import com.lesfeesdesoeufsbio.eggcounter.utils.AppLifecycleObserver
@@ -40,14 +51,54 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
+
             EggCounterTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    MainView(
-                        modifier = Modifier.padding(innerPadding)
-                    )
+               Router()
+            }
+        }
+    }
+}
+
+@Composable
+fun Router(navController: NavHostController = rememberNavController()){
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    var currentRoute = navBackStackEntry?.destination?.route
+
+    val navItem = listOf(
+        NavItem("today",Icons.Default.Egg) {arg -> MainView(arg) },
+        NavItem("history",Icons.Default.History) {arg -> Text("holla") }
+    )
+    Column {
+        Scaffold(
+            modifier = Modifier.weight(1f),
+            bottomBar = {
+            }) { innerPadding ->
+            NavHost(navController, startDestination = navItem[0].label) {
+                navItem.forEach{ item ->
+                    composable(item.label) { item.route.invoke(
+                        Modifier.padding(innerPadding)
+                    ) }
+
                 }
             }
         }
+        NavigationBar (Modifier.wrapContentHeight()){
+                navItem.forEach{ item ->
+                NavigationBarItem(
+                    icon = { Icon(item.icon, contentDescription = item.label) },
+                    label = { Text(item.label) },
+                    selected = currentRoute == item.label,
+                    onClick = {  navController.navigate(item.label) {
+
+                        //popUpTo(navController.graph.startDestinationId)
+                        launchSingleTop = true
+                    } }
+                )
+            }
+
+        }
+
+
     }
 }
 
@@ -64,7 +115,7 @@ fun MainView(modifier: Modifier = Modifier,mainViewModel: MainViewModel = viewMo
             Row(
                 modifier = Modifier
                     .wrapContentHeight()
-                    .padding(vertical = 20.dp, horizontal = 6.dp)
+                    .weight(1f)
             ) {
                 for (size in EggSize.values()){
                     CounterItem(quantity,size,
@@ -85,3 +136,5 @@ fun MainView(modifier: Modifier = Modifier,mainViewModel: MainViewModel = viewMo
 
     }
 }
+
+data class NavItem(val label: String, val icon: ImageVector,val route : @Composable ((Modifier) -> Unit)) {}
