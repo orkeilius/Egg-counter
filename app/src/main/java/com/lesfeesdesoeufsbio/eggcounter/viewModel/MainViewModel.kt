@@ -25,12 +25,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _uiState.value = daySaleReposytory.getDay()
     }
 
-
-    var update by mutableStateOf(false)
-        private set
-
-
-
     fun counterAdd(eggNumber: EggNumber,eggSize: EggSize){
         val newState = daySale.value.deepcopy()
         newState.addSale(EggSale(eggNumber,eggSize))
