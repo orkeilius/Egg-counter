@@ -18,16 +18,16 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.ProcessLifecycleOwner
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lesfeesdesoeufsbio.eggcounter.utils.AppLifecycleObserver
 import com.lesfeesdesoeufsbio.eggcounter.view.ui.theme.EggCounterTheme
+import com.lesfeesdesoeufsbio.eggcounter.viewModel.MainViewModel
 import kotlinx.coroutines.launch
 
 
@@ -51,10 +51,7 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Router(navController: NavHostController = rememberNavController()){
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
-
+fun Router(){
     val navItem = listOf(
         NavItem("today",Icons.Default.Egg, {arg -> MainView(arg) },0),
         NavItem("history", Icons.Default.History, { arg -> HistoryView(arg) },1)
@@ -75,7 +72,7 @@ fun Router(navController: NavHostController = rememberNavController()){
                         )
                     },
                         label = { Text(item.label) },
-                        selected = currentRoute == item.label,
+                        selected = pagerState.currentPage == item.pos,
                         onClick = {
                             coroutineScope.launch {
                                 pagerState.animateScrollToPage(item.pos)
