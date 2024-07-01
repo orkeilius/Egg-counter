@@ -38,7 +38,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lesfeesdesoeufsbio.eggcounter.model.DaySale
 import com.lesfeesdesoeufsbio.eggcounter.model.EggNumber
 import com.lesfeesdesoeufsbio.eggcounter.model.EggSize
+import com.lesfeesdesoeufsbio.eggcounter.utils.TimeHelper
 import com.lesfeesdesoeufsbio.eggcounter.viewModel.HistoryViewModel
+import kotlinx.datetime.format
 
 @Preview
 @Composable
@@ -60,6 +62,7 @@ fun HistorytItem(
 
 
 
+
     Card(
         onClick = { historyViewModel.openCard(daySale.date.toEpochDays()) },
         modifier = modifier
@@ -76,7 +79,7 @@ fun HistorytItem(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = daySale.date.toString(),
+                    text = daySale.date.format(TimeHelper.customFormat),
                     fontSize = 28.sp,
                 )
                 Column {
