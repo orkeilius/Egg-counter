@@ -9,6 +9,8 @@ import kotlinx.serialization.Serializable
 class EggSale(
     val number: EggNumber,
     val size: EggSize,
+
+    //keep to work with older saved data
     val time : LocalDateTime = TimeHelper.getCurrentLocalDateTime()
 
 

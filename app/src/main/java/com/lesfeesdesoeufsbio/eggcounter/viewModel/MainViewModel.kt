@@ -2,6 +2,7 @@ package com.lesfeesdesoeufsbio.eggcounter.viewModel
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import com.lesfeesdesoeufsbio.eggcounter.model.DaySale
@@ -20,7 +21,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _uiState = MutableStateFlow(DaySale())
     val daySale= _uiState.asStateFlow()
     @SuppressLint("StaticFieldLeak")
-    val context = application.applicationContext
+    val context: Context = application.applicationContext
 
     init {
         _uiState.value = daySaleReposytory.getDay()
@@ -47,5 +48,5 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             Toast.makeText(context,"Prix non ajouté",Toast.LENGTH_SHORT).show()
         }
     }
-    
+
 }

@@ -39,6 +39,7 @@ fun CounterItem(
     val daySale by mainViewModel.daySale.collectAsState()
     val animatedSize by animateDpAsState(
         targetValue = if (daySale.getNumberSaleForType(eggNumber, eggSize) != 0) 30.dp else 0.dp,
+        label= "animatedSize"
     )
     Card(
         modifier = modifier

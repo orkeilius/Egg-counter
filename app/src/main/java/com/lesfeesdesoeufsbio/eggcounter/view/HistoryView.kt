@@ -1,13 +1,11 @@
 package com.lesfeesdesoeufsbio.eggcounter.view
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lesfeesdesoeufsbio.eggcounter.view.item.HistorytItem
@@ -19,9 +17,7 @@ fun HistoryView(modifier: Modifier = Modifier, historyViewModel: HistoryViewMode
 
 
     Column(modifier =  modifier) {
-        LazyColumn(
-            //modifier = Modifier.wrapContentHeight()
-        ) {
+        LazyColumn {
             items(
                 daySales,
             ) { daySale ->

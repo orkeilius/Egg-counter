@@ -60,8 +60,6 @@ fun Router(navController: NavHostController = rememberNavController()){
         NavItem("history", Icons.Default.History, { arg -> HistoryView(arg) },1)
     )
 
-    val currentPos:Int = navItem.fold(0){acc,item -> if (item.label == currentRoute) item.pos else acc }
-
     val pagerState = rememberPagerState(pageCount = {
         navItem.count()
     })

@@ -29,7 +29,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -52,12 +51,13 @@ fun HistorytItem(
     val openDate by historyViewModel.openDate.collectAsState()
 
     val visible = (openDate == daySale.date.toEpochDays())
-    val density = LocalDensity.current
     val animatedSize by animateDpAsState(
         targetValue = if (visible) 350.dp else 0.dp,
+        label= "animatedSize"
     )
     val animatedRotation by animateFloatAsState(
         targetValue = if (visible) 90f else 0f,
+        label= "animatedRotation"
     )
 
 
@@ -69,7 +69,7 @@ fun HistorytItem(
             .padding(8.dp)
             .fillMaxWidth()
     ) {
-        Column() {
+        Column {
 
             Row(
                 modifier = Modifier
