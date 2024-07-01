@@ -24,7 +24,7 @@ import com.lesfeesdesoeufsbio.eggcounter.viewModel.MainViewModel
 
 @Composable
 fun MainView(modifier: Modifier = Modifier, mainViewModel: MainViewModel = viewModel()) {
-    val daySale by mainViewModel.daySale.collectAsState()
+    val daySale by mainViewModel.currentDaySale.collectAsState()
     Column(
         modifier = modifier
             .fillMaxSize(),

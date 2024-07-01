@@ -17,30 +17,43 @@ import kotlinx.coroutines.flow.update
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val daySaleReposytory = DaySaleReposytory.getInstance(application.applicationContext)
-    private val _uiState = MutableStateFlow(DaySale())
-    val daySale= _uiState.asStateFlow()
+    private val daySaleRepository = DaySaleReposytory.getInstance(application.applicationContext)
+
     @SuppressLint("StaticFieldLeak")
     val context: Context = application.applicationContext
 
+    private val _daySale = MutableStateFlow(DaySale())
+    val currentDaySale = _daySale.asStateFlow()
+
+    private val _daySales = MutableStateFlow(arrayListOf<DaySale>())
+    val daySales = _daySales.asStateFlow()
+
     init {
-        _uiState.value = daySaleReposytory.getDay()
+        _daySale.value = daySaleRepository.getDay()
+        _daySales.value = daySaleRepository.getAllDay()
     }
 
     fun counterAdd(eggNumber: EggNumber,eggSize: EggSize){
-        val newState = daySale.value.deepcopy()
+        val newState = currentDaySale.value.deepcopy()
         val newSale = EggSale(eggNumber,eggSize)
         newState.addSale(newSale)
-        daySaleReposytory.save(newState)
-        _uiState.update { newState }
+        updateCurrentDaySale(newState)
 
         checkWarningPriceNotSet(newSale)
     }
     fun counterRemove(eggNumber: EggNumber,eggSize: EggSize){
-        val newState = daySale.value.deepcopy()
+        val newState = currentDaySale.value.deepcopy()
         newState.removeSale(eggNumber,eggSize)
-        daySaleReposytory.save(newState)
-        _uiState.update { newState }
+        updateCurrentDaySale(newState)
+    }
+
+    fun updateCurrentDaySale(newDaySale: DaySale) {
+        daySaleRepository.save(newDaySale)
+        _daySale.update { newDaySale }
+
+        _daySales.update {
+            (arrayListOf(newDaySale) + it.filter { it.date != currentDaySale.value.date }) as ArrayList<DaySale>
+        }
     }
 
     private fun checkWarningPriceNotSet(eggSale: EggSale){
@@ -48,5 +61,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             Toast.makeText(context,"Prix non ajouté",Toast.LENGTH_SHORT).show()
         }
     }
+
+    // history page
+
+    private val _openDate = MutableStateFlow(-1)
+    var openDate = _openDate.asStateFlow()
+
+    fun openCard(date: Int) {
+        if (openDate.value == date) {
+            _openDate.update { -1 }
+        } else {
+            _openDate.update { date }
+        }
+    }
+
 
 }

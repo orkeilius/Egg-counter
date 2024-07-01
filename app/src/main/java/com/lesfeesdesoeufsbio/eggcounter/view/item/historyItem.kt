@@ -38,7 +38,7 @@ import com.lesfeesdesoeufsbio.eggcounter.model.DaySale
 import com.lesfeesdesoeufsbio.eggcounter.model.EggNumber
 import com.lesfeesdesoeufsbio.eggcounter.model.EggSize
 import com.lesfeesdesoeufsbio.eggcounter.utils.TimeHelper
-import com.lesfeesdesoeufsbio.eggcounter.viewModel.HistoryViewModel
+import com.lesfeesdesoeufsbio.eggcounter.viewModel.MainViewModel
 import kotlinx.datetime.format
 
 @Preview
@@ -46,9 +46,9 @@ import kotlinx.datetime.format
 fun HistorytItem(
     modifier: Modifier = Modifier,
     daySale: DaySale = DaySale(),
-    historyViewModel: HistoryViewModel = viewModel()
+    mainViewModel: MainViewModel = viewModel()
 ) {
-    val openDate by historyViewModel.openDate.collectAsState()
+    val openDate by mainViewModel.openDate.collectAsState()
 
     val visible = (openDate == daySale.date.toEpochDays())
     val animatedSize by animateDpAsState(
@@ -61,10 +61,8 @@ fun HistorytItem(
     )
 
 
-
-
     Card(
-        onClick = { historyViewModel.openCard(daySale.date.toEpochDays()) },
+        onClick = { mainViewModel.openCard(daySale.date.toEpochDays()) },
         modifier = modifier
             .padding(8.dp)
             .fillMaxWidth()
