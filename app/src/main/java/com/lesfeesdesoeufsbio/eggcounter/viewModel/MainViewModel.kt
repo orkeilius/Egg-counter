@@ -1,6 +1,8 @@
 package com.lesfeesdesoeufsbio.eggcounter.viewModel
 
+import android.annotation.SuppressLint
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import com.lesfeesdesoeufsbio.eggcounter.model.DaySale
 import com.lesfeesdesoeufsbio.eggcounter.model.DaySaleReposytory
@@ -17,6 +19,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val daySaleReposytory = DaySaleReposytory.getInstance(application.applicationContext)
     private val _uiState = MutableStateFlow(DaySale())
     val daySale= _uiState.asStateFlow()
+    @SuppressLint("StaticFieldLeak")
+    val context = application.applicationContext
 
     init {
         _uiState.value = daySaleReposytory.getDay()
@@ -24,9 +28,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun counterAdd(eggNumber: EggNumber,eggSize: EggSize){
         val newState = daySale.value.deepcopy()
-        newState.addSale(EggSale(eggNumber,eggSize))
+        val newSale = EggSale(eggNumber,eggSize)
+        newState.addSale(newSale)
         daySaleReposytory.save(newState)
         _uiState.update { newState }
+
+        checkWarningPriceNotSet(newSale)
     }
     fun counterRemove(eggNumber: EggNumber,eggSize: EggSize){
         val newState = daySale.value.deepcopy()
@@ -35,5 +42,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _uiState.update { newState }
     }
 
-
+    private fun checkWarningPriceNotSet(eggSale: EggSale){
+        if (eggSale.getPrice() == 0f){
+            Toast.makeText(context,"Prix non ajouté",Toast.LENGTH_SHORT).show()
+        }
+    }
+    
 }
