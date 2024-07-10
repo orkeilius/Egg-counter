@@ -35,7 +35,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun counterAdd(eggNumber: EggNumber,eggSize: EggSize){
         val newState = currentDaySale.value.deepcopy()
-        val newSale = EggSale(eggNumber,eggSize)
+        val newSale = EggSale(eggNumber, eggSize)
         newState.addSale(newSale)
         updateCurrentDaySale(newState)
 
@@ -45,6 +45,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val newState = currentDaySale.value.deepcopy()
         newState.removeSale(eggNumber,eggSize)
         updateCurrentDaySale(newState)
+    }
+
+    fun setName(name:String){
+        val newState = currentDaySale.value.deepcopy()
+        updateCurrentDaySale(newState.copy(name=name))
     }
 
     fun updateCurrentDaySale(newDaySale: DaySale) {

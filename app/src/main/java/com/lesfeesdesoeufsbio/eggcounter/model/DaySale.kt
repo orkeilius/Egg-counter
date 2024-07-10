@@ -6,9 +6,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class DaySale(
-
     val date: LocalDate = TimeHelper.getCurrentLocalDateTime().date,
-    val sales: MutableList<EggSale> = arrayListOf()
+    val sales: MutableList<EggSale> = arrayListOf(),
+    val name: String = "Sans Nom"
 ) {
 
 
@@ -25,7 +25,7 @@ data class DaySale(
     }
 
     fun getTotalForType(eggNumber: EggNumber, eggSize: EggSize): Float {
-        val price = EggSale(eggNumber,eggSize).getPrice()
+        val price = EggSale(eggNumber, eggSize).getPrice()
         val eggSaleNb =  getNumberSaleForType(eggNumber,eggSize)
         return price * eggSaleNb
     }

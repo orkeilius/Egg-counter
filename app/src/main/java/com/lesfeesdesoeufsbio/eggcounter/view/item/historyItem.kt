@@ -76,10 +76,12 @@ fun HistorytItem(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    text = daySale.date.format(TimeHelper.customFormat),
-                    fontSize = 28.sp,
-                )
+                Column (modifier = Modifier.weight(2f)){
+                    Text(text = daySale.name, fontSize = 20.sp)
+                    Text(
+                        text = daySale.date.format(TimeHelper.customFormat),
+                    )
+                }
                 Column {
                     EggSize.entries.forEach { size ->
                         Row {
