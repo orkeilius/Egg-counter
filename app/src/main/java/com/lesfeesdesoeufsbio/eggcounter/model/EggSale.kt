@@ -18,7 +18,13 @@ class EggSale(
 
     fun getPrice():Float{
         when(size){
-            EggSize.small -> return 0f
+            EggSize.small -> {
+                return when(number){
+                    EggNumber.six -> 2f
+                    EggNumber.twelve -> 3.50f
+                    EggNumber.thirty -> 7f
+                }
+            }
             EggSize.medium -> {
                 return when(number){
                     EggNumber.six -> 2.50f
