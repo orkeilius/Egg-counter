@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import com.lesfeesdesoeufsbio.eggcounter.model.DaySale
 import com.lesfeesdesoeufsbio.eggcounter.model.DaySaleReposytory
+import com.lesfeesdesoeufsbio.eggcounter.model.PriceRepository
 import com.lesfeesdesoeufsbio.eggcounter.model.EggNumber
 import com.lesfeesdesoeufsbio.eggcounter.model.EggSale
 import com.lesfeesdesoeufsbio.eggcounter.model.EggSize
@@ -18,6 +19,7 @@ import kotlinx.coroutines.flow.update
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val daySaleRepository = DaySaleReposytory.getInstance(application.applicationContext)
+    private val priceRepository = PriceRepository.getInstance(application.applicationContext)
 
     @SuppressLint("StaticFieldLeak")
     val context: Context = application.applicationContext
@@ -35,7 +37,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun counterAdd(eggNumber: EggNumber,eggSize: EggSize){
         val newState = currentDaySale.value.deepcopy()
-        val newSale = EggSale(eggNumber, eggSize)
+        val price = priceRepository.getPrice(eggNumber, eggSize)
+        val newSale = EggSale(eggNumber, eggSize, customPrice = price)
         newState.addSale(newSale)
         updateCurrentDaySale(newState)
 

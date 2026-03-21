@@ -10,13 +10,13 @@ class EggSale(
     val number: EggNumber,
     val size: EggSize,
 
-    //keep to work with older saved data
-    val time : LocalDateTime = TimeHelper.getCurrentLocalDateTime()
-
-
+    val time : LocalDateTime = TimeHelper.getCurrentLocalDateTime(),
+    val customPrice: Float? = null
 ){
 
     fun getPrice():Float{
+        if (customPrice != null) return customPrice
+
         when(size){
             EggSize.small -> {
                 return when(number){

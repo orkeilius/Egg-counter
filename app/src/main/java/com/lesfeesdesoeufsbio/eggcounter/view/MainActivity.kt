@@ -12,6 +12,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Egg
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -50,7 +51,8 @@ class MainActivity : ComponentActivity() {
 fun Router(){
     val navItem = listOf(
         NavItem("today",Icons.Default.Egg, {arg -> MainView(arg) },0),
-        NavItem("history", Icons.Default.History, { arg -> HistoryView(arg) },1)
+        NavItem("history", Icons.Default.History, { arg -> HistoryView(arg) },1),
+        NavItem("settings", Icons.Default.Settings, { arg -> SettingsView(arg) },2)
     )
 
     val pagerState = rememberPagerState(pageCount = {
